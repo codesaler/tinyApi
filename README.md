@@ -1,8 +1,6 @@
 # tinyApi
 
-极其精简的 Api 脚手架。
-
-### features
+极其精简的 Api 脚手架：
 
 - 使用 composer
 - DB：[catfan/Medoo](https://github.com/catfan/Medoo)
@@ -14,11 +12,6 @@
 - 默认开启 AES
 - 默认开启 VERIFY_TIMESTAMP/VERIFY_HASH
 
-### global functions
+没什么好介绍的，代码都在 `/public/index.php` 里面了：
 
-- `_config(string $file, string $key = null)`：获取配置
-- `_success(array $data): void`：exit 成功 json
-- `_error(int $code, string $msg): void`：exit 失败 json
-- `_medoo(): \Medoo\Medoo`：获取单例 Medoo
-- `_predis(): \Predis\Client`：获取单例 Predis
-- `_monolog(string $subDir = null): \Monolog\Logger`：获取单例 Monolog
+![](https://raw.githubusercontent.com/LemonLone/tinyApi/master/screenshot.png)
