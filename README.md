@@ -1,6 +1,8 @@
 # tinyApi
 
-极其精简的 Api 脚手架：
+极其精简的 Api 脚手架。
+
+### features
 
 - 使用 composer
 - DB：[catfan/Medoo](https://github.com/catfan/Medoo)
@@ -11,6 +13,8 @@
 - 默认 POST，参数强制使用 Json
 - 默认开启 AES
 - 默认开启 VERIFY_TIMESTAMP/VERIFY_HASH
+
+### introduce
 
 没什么好介绍的，代码都在 `/public/index.php` 里面了：
 
