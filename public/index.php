@@ -203,14 +203,12 @@ call_user_func(function () {
 //    preg_match('/\@method ([a-z]+)/', $annotation, $matches);
 //    if (!$matches) {
 //        throw new \RuntimeException(
-//            "action '{$controllerClass}::{$actionName}' method annotation not defined",
-//            \accnt\api\util\Code::ACTION_METHOD_ANNOTATION_NOT_DEFINED
+//            "action '{$controllerClass}::{$actionName}' method annotation not defined"
 //        );
 //    }
 //    if (strtolower($matches[1]) !== strtolower($_SERVER['REQUEST_METHOD'])) {
 //        throw new \RuntimeException(
-//            "action '{$controllerClass}::{$actionName}' method annotation not matched",
-//            \accnt\api\util\Code::ACTION_METHOD_ANNOTATION_NOT_MATCHED
+//            "action '{$controllerClass}::{$actionName}' method annotation not matched"
 //        );
 //    }
 
