@@ -7,12 +7,10 @@
 // paths
 define('PATH_ROOT', dirname(__DIR__));
 define('PATH_CONFIG', PATH_ROOT . '/config');
-define('PATH_CACHE', PATH_ROOT . '/cache');
-define('PATH_LOG', PATH_ROOT . '/log');
 
 // namespaces
-define('NAMESPACE_CONTROLLER', '\\accnt\\api\\controller');
-define('NAMESPACE_MODEL', '\\accnt\\api\\model');
+define('NAMESPACE_CONTROLLER', '\\api\\controller');
+define('NAMESPACE_MODEL', '\\api\\model');
 
 // default exception code
 define('DEFAULT_EXCEPTION_CODE', 99999);
@@ -100,19 +98,57 @@ function _error(int $code, string $msg): void
 }
 
 /**
- * _log
+ * _medoo
+ *
+ * @return \Medoo\Medoo
  */
-function _log(): void
+function _medoo(): \Medoo\Medoo
 {
-
+    static $medoo;
+    if (empty($medoo)) {
+        $medoo = new \Medoo\Medoo(_config('config', 'medoo'));
+    }
+    return $medoo;
 }
 
 /**
- * _model
+ * _predis
+ *
+ * @return \Predis\Client
  */
-function _model(): \accnt\api\model\Model
+function _predis(): \Predis\Client
 {
+    static $predis;
+    if (empty($predis)) {
+        $predis = new \Predis\Client(_config('config', 'predis'));
+    }
+    return $predis;
+}
 
+/**
+ * _monolog
+ *
+ * @param string|null $subDir
+ * @return \Monolog\Logger
+ * @throws Exception
+ */
+function _monolog(string $subDir = null): \Monolog\Logger
+{
+    static $loggers = [];
+    $file = sprintf(
+        '%s%s/%s.log',
+        _config('config', 'monolog.dir'),
+        is_null($subDir) ? '' : '/' . rtrim(ltrim($subDir, '/'), '/'),
+        date('Ymd')
+    );
+    if (!isset($loggers[$file])) {
+        $logger = new \Monolog\Logger(_config('config', 'monolog.name'));
+        $logger->pushHandler(
+            new \Monolog\Handler\StreamHandler($file, _config('config', 'monolog.level'))
+        );
+        $loggers[$file] = $logger;
+    }
+    return $loggers[$file];
 }
 
 // ==================================================
@@ -125,15 +161,12 @@ error_reporting(E_ALL);
 
 // error handler
 set_error_handler(function (int $errno , string $errstr) {
-    \accnt\api\util\Json::error(
-        $errno,
-        "error: {$errstr}"
-    );
+    _error($errno, "error: {$errstr}");
 });
 
 // exception handler
 set_exception_handler(function (\Throwable $ex) {
-    \accnt\api\util\Json::error(
+    _error(
         $ex->getCode() ?: DEFAULT_EXCEPTION_CODE,
         'exception: ' . $ex->getMessage()
     );
@@ -146,25 +179,23 @@ set_exception_handler(function (\Throwable $ex) {
 // closure
 call_user_func(function () {
     $url = parse_url($_SERVER['REQUEST_URI']);
-    $controllerClass = '\\accnt\\api\\controller\\IndexController';
+    $controllerClass = NAMESPACE_CONTROLLER . '\\IndexController';
     $actionName = 'index';
     if (!empty($url['path']) && $url['path'] !== '/') {
         $path = explode('/', ltrim($url['path'], '/'));
-        $controllerClass = sprintf('\\accnt\\api\\controller\\%sController', ucfirst($path[0]));
+        $controllerClass = sprintf('%s\\%sController', NAMESPACE_CONTROLLER, ucfirst($path[0]));
         if (isset($path[1])) {
             $actionName = lcfirst($path[1]);
         }
     }
     if (!class_exists($controllerClass)) {
         throw new \RuntimeException(
-            "controller class '{$controllerClass}' not defined",
-            \accnt\api\util\Code::CONTROLLER_CLASS_NOT_DEFINED
+            "controller class '{$controllerClass}' not defined"
         );
     }
     if (!method_exists($controllerClass, $actionName)) {
         throw new \RuntimeException(
-            "action '{$actionName}' not defined in class '{$controllerClass}'",
-            \accnt\api\util\Code::ACTION_NOT_DEFINED
+            "action '{$actionName}' not defined in class '{$controllerClass}'"
         );
     }
 
@@ -189,13 +220,13 @@ call_user_func(function () {
     if (!empty($input)) {
         $request = json_decode($input, true);
         if (!$request) {
-            throw new \RuntimeException('request not json', \accnt\api\util\Code::REQUEST_NOT_JSON);
+            throw new \RuntimeException('request not json');
         }
     }
 
     // dispatch
     $controller = new $controllerClass($request);
-    \accnt\api\util\Json::success(
+    _success(
         call_user_func([$controller, $actionName])
     );
 });

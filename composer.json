@@ -1,16 +1,17 @@
 {
-    "name": "accnt/api",
+    "name": "LemonLone/tinyApi",
     "type": "project",
     "license": "MIT",
     "require": {
         "php": ">=7.2",
         "catfan/medoo": "~1.5",
         "predis/predis": "~1.1",
+        "monolog/monolog": "~1.23",
         "phpseclib/phpseclib": "~2.0"
     },
     "autoload": {
         "psr-4": {
-            "accnt\\api\\": ""
+            "api\\": ""
         }
     },
     "minimum-stability": "stable",
