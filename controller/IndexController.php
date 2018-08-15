@@ -16,6 +16,8 @@ class IndexController
      */
     public function index(): array
     {
-        return _model('demo')->getVersion();
+        return [
+            'version' => _model('demo')->getVersion()
+        ];
     }
 }
