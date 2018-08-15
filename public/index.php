@@ -36,7 +36,7 @@ error_reporting(E_ALL);
 set_exception_handler(function (\Throwable $ex) {
     exit(json_encode([
         'code' => $ex->getCode() ?: 99999,
-        'msg' => 'exception: ' . $ex->getMessage()
+        'msg' => $ex->getMessage()
     ]));
 });
 
@@ -184,6 +184,35 @@ function _model(string $modelName): \tiny\api\model\AbstractModel
 // closure
 call_user_func(function () {
     $url = parse_url($_SERVER['REQUEST_URI']);
+
+    // timestamp hash check
+    if (_config('config', 'verify.enable')) {
+        if (
+            !isset($_SERVER['VERIFY_TIMESTAMP'])
+            || !isset($_SERVER['VERIFY_KEY'])
+            || !isset($_SERVER['VERIFY_HASH'])
+        ) {
+            throw new \RuntimeException('verify params not found');
+        }
+        if ($_SERVER['VERIFY_TIMESTAMP'] > time()) {
+            throw new \RuntimeException('verify timestamp invalid');
+        }
+        if (time() - $_SERVER['VERIFY_TIMESTAMP'] > _config('config', 'verify.interval')) {
+            throw new \RuntimeException('verify timestamp too old');
+        }
+        if ($_SERVER['VERIFY_KEY'] !== _config('config', 'verify.key')) {
+            throw new \RuntimeException('verify key not match');
+        }
+        $verifyString = _config('config', 'verify.key')
+            . $url['path']
+            . $_SERVER['VERIFY_TIMESTAMP']
+            . _config('config', 'verify.secret');
+        if (md5($verifyString) !== $_SERVER['VERIFY_HASH']) {
+            throw new \RuntimeException('verify hash not match');
+        }
+    }
+
+    // controller & action
     $controllerClass = '\\tiny\\api\\controller\\IndexController';
     $actionName = 'index';
     if (!empty($url['path']) && $url['path'] !== '/') {
