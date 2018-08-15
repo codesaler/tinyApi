@@ -9,8 +9,8 @@
 - Log：[Seldaek/monolog](https://github.com/Seldaek/monolog)
 - 没有容器/注解/ORM，不支持 RESTful/自定义路由
 - 请求参数强制使用 Json（统一 POST 请求）
-- 强制使用 AES 加密
-- 强制进行 timestamp hash 头校验
+- 建议开启 AES 加密
+- 建议开启 timestamp hash 头校验
 
 没什么使用文档。
 
