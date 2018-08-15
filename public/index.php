@@ -140,6 +140,22 @@ function _model(string $modelName): \tiny\api\model\AbstractModel
     return $models[$modelClass];
 }
 
+/**
+ * _aes
+ *
+ * @return \phpseclib\Crypt\AES
+ */
+function _aes(): \phpseclib\Crypt\AES
+{
+    static $aes;
+    if (empty($aes)) {
+        $aes = new \phpseclib\Crypt\AES();
+        $aes->setKey(_config('config', 'aes.key'));
+        $aes->setIV(_config('config', 'aes.iv'));
+    }
+    return $aes;
+}
+
 // ==================================================
 //  error & exception handler
 // ==================================================
