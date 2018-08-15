@@ -24,7 +24,7 @@ return [
         'iv' => '55eaa49877495b8e6b6fd831d42f8e96'
     ],
     'verify' => [
-        'enable' => true,
+        'enable' => false,
         'interval' => 5,
         'key' => 'test',
         'secret' => '192c3896faeb6d14e2208ee3eb96f38c'
