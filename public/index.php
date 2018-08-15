@@ -201,14 +201,14 @@ call_user_func(function () {
             throw new \RuntimeException('verify timestamp too old');
         }
         if ($_SERVER['VERIFY_KEY'] !== _config('config', 'verify.key')) {
-            throw new \RuntimeException('verify key not match');
+            throw new \RuntimeException('verify key not matched');
         }
         $verifyString = _config('config', 'verify.key')
             . $url['path']
             . $_SERVER['VERIFY_TIMESTAMP']
             . _config('config', 'verify.secret');
         if (md5($verifyString) !== $_SERVER['VERIFY_HASH']) {
-            throw new \RuntimeException('verify hash not match');
+            throw new \RuntimeException('verify hash not matched');
         }
     }
 
