@@ -121,6 +121,25 @@ function _monolog(string $subDir = null): \Monolog\Logger
     return $loggers[$file];
 }
 
+/**
+ * _model
+ *
+ * @param string $modelName
+ * @return \tiny\api\model\AbstractModel
+ */
+function _model(string $modelName): \tiny\api\model\AbstractModel
+{
+    static $models;
+    $modelClass = sprintf('\\tiny\\api\\model\\%sModel', ucfirst($modelName));
+    if (!isset($models[$modelName])) {
+        if (!class_exists($modelClass)) {
+            throw new \RuntimeException("model '{$modelClass}' not found");
+        }
+        $models[$modelClass] = new $modelClass();
+    }
+    return $models[$modelClass];
+}
+
 // ==================================================
 //  error & exception handler
 // ==================================================
@@ -149,15 +168,11 @@ set_error_handler(function (int $errno , string $errstr) {
 // closure
 call_user_func(function () {
     $url = parse_url($_SERVER['REQUEST_URI']);
-    $controllerClass = _config('config', 'namespace.controller') . '\\IndexController';
+    $controllerClass = '\\tiny\\api\\controller\\IndexController';
     $actionName = 'index';
     if (!empty($url['path']) && $url['path'] !== '/') {
         $path = explode('/', ltrim($url['path'], '/'));
-        $controllerClass = sprintf(
-            '%s\\%sController',
-            _config('config', 'namespace.controller'),
-            ucfirst($path[0])
-        );
+        $controllerClass = sprintf('\\tiny\\api\\controller\\%sController', ucfirst($path[0]));
         if (isset($path[1])) {
             $actionName = lcfirst($path[1]);
         }

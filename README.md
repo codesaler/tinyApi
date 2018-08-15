@@ -5,6 +5,7 @@
 ### features
 
 - 使用 composer
+- 默认 namespace 为 `tiny\api\`
 - DB：[catfan/Medoo](https://github.com/catfan/Medoo)
 - Redis：[nrk/predis](https://github.com/nrk/predis)
 - Log：[Seldaek/monolog](https://github.com/Seldaek/monolog)

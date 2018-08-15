@@ -1,10 +1,6 @@
 <?php
 
 return [
-    'namespace' => [
-        'controller' => '\\api\\controller',
-        'model' => '\\api\\model'
-    ],
     'medoo' => [
         'database_type' => 'mysql',
         'database_name' => 'dbname',
