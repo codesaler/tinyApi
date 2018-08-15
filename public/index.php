@@ -185,8 +185,6 @@ function _model(string $modelName): \tiny\api\model\AbstractModel
 call_user_func(function () {
     $url = parse_url($_SERVER['REQUEST_URI']);
 
-    var_dump($_SERVER);
-
     // timestamp hash check
     if (_config('config', 'verify.enable')) {
         if (
