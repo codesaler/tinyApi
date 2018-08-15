@@ -16,6 +16,6 @@
 
 ### introduce
 
-没什么好介绍的，代码都在 `/public/index.php` 里面了。
+没什么好介绍的。
 
 ![](https://raw.githubusercontent.com/LemonLone/tinyApi/master/screenshot.png)
