@@ -1,6 +1,6 @@
 # tinyApi
 
-极其精简的 Api 脚手架：
+极其精简的 Api 脚手架。
 
 - 使用 composer
 - namespace 默认 `tiny\api\`
