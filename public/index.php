@@ -4,16 +4,12 @@
 //  settings
 // ==================================================
 
+// start time
+define('TIME_START', microtime(true));
+
 // paths
 define('PATH_ROOT', dirname(__DIR__));
 define('PATH_CONFIG', PATH_ROOT . '/config');
-
-// namespaces
-define('NAMESPACE_CONTROLLER', '\\api\\controller');
-define('NAMESPACE_MODEL', '\\api\\model');
-
-// default exception code
-define('DEFAULT_EXCEPTION_CODE', 99999);
 
 // timezone
 date_default_timezone_set('PRC');
@@ -136,7 +132,7 @@ error_reporting(E_ALL);
 // exception handler
 set_exception_handler(function (\Throwable $ex) {
     exit(json_encode([
-        'code' => $ex->getCode() ?: DEFAULT_EXCEPTION_CODE,
+        'code' => $ex->getCode() ?: 99999,
         'msg' => 'exception: ' . $ex->getMessage()
     ]));
 });
@@ -153,11 +149,15 @@ set_error_handler(function (int $errno , string $errstr) {
 // closure
 call_user_func(function () {
     $url = parse_url($_SERVER['REQUEST_URI']);
-    $controllerClass = NAMESPACE_CONTROLLER . '\\IndexController';
+    $controllerClass = _config('config', 'namespace.controller') . '\\IndexController';
     $actionName = 'index';
     if (!empty($url['path']) && $url['path'] !== '/') {
         $path = explode('/', ltrim($url['path'], '/'));
-        $controllerClass = sprintf('%s\\%sController', NAMESPACE_CONTROLLER, ucfirst($path[0]));
+        $controllerClass = sprintf(
+            '%s\\%sController',
+            _config('config', 'namespace.controller'),
+            ucfirst($path[0])
+        );
         if (isset($path[1])) {
             $actionName = lcfirst($path[1]);
         }
@@ -198,8 +198,11 @@ call_user_func(function () {
 
     // dispatch
     $controller = new $controllerClass($request);
-    exit(json_encode([
+    $response = json_encode([
         'code' => 0,
+        'timestamp' => time(),
+        'cost' => microtime(true) - TIME_START,
         'data' => call_user_func([$controller, $actionName])
-    ]));
+    ]);
+    exit($response);
 });
