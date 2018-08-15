@@ -25,6 +25,27 @@ header('Content-Type:application/json;charset=UTF-8');
 require PATH_ROOT . '/vendor/autoload.php';
 
 // ==================================================
+//  error & exception handler
+// ==================================================
+
+// error level
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+// exception handler
+set_exception_handler(function (\Throwable $ex) {
+    exit(json_encode([
+        'code' => $ex->getCode() ?: 99999,
+        'msg' => 'exception: ' . $ex->getMessage()
+    ]));
+});
+
+// error handler
+set_error_handler(function (int $errno , string $errstr) {
+    throw new \RuntimeException("error: {$errstr}", $errno);
+});
+
+// ==================================================
 //  global functions
 // ==================================================
 
@@ -155,27 +176,6 @@ function _model(string $modelName): \tiny\api\model\AbstractModel
     }
     return $models[$modelClass];
 }
-
-// ==================================================
-//  error & exception handler
-// ==================================================
-
-// error level
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-// exception handler
-set_exception_handler(function (\Throwable $ex) {
-    exit(json_encode([
-        'code' => $ex->getCode() ?: 99999,
-        'msg' => 'exception: ' . $ex->getMessage()
-    ]));
-});
-
-// error handler
-set_error_handler(function (int $errno , string $errstr) {
-    throw new \RuntimeException("error: {$errstr}", $errno);
-});
 
 // ==================================================
 //  routing
