@@ -129,7 +129,7 @@ function _monolog(string $subDir = null): \Monolog\Logger
  */
 function _model(string $modelName): \tiny\api\model\AbstractModel
 {
-    static $models;
+    static $models = [];
     $modelClass = sprintf('\\tiny\\api\\model\\%sModel', ucfirst($modelName));
     if (!isset($models[$modelName])) {
         if (!class_exists($modelClass)) {
