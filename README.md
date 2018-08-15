@@ -14,6 +14,6 @@
     - 规则：hash = md5(key + path + timestamp + secret)
 - 建议开启 AES 加密
 
-没什么使用文档。
+要什么使用文档。
 
 ![](https://raw.githubusercontent.com/LemonLone/tinyApi/master/screenshot.png)
