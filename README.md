@@ -10,7 +10,7 @@
 - 没有容器 / 注解 / ORM，不支持 RESTful / 自定义路由
 - 请求参数强制使用 Json（统一 POST 请求）
 - 建议开启 timestamp hash 头校验
-    - 参数：verify-timestamp/verify-key/verify-hash
+    - 参数：verify-timestamp / verify-key / verify-hash
     - 规则：md5(key + path + timestamp + secret)
 - 建议开启 AES 加密
 
