@@ -22,6 +22,9 @@ date_default_timezone_set('PRC');
 ini_set('session.auto_start', 0);
 session_save_path('/dev/null');
 
+// json header
+header('Content-Type:application/json;charset=UTF-8');
+
 // composer autoload
 require PATH_ROOT . '/vendor/autoload.php';
 
@@ -66,35 +69,6 @@ function _config(string $file, string $key = null)
             return $configs[$key];
         }
     }
-}
-
-/**
- * _success
- *
- * @param array $data
- */
-function _success(array $data): void
-{
-    header('Content-Type:application/json;charset=UTF-8');
-    exit(json_encode([
-        'code' => 0,
-        'data' => $data
-    ]));
-}
-
-/**
- * _error
- *
- * @param int $code
- * @param string $msg
- */
-function _error(int $code, string $msg): void
-{
-    header('Content-Type:application/json;charset=UTF-8');
-    exit(json_encode([
-        'code' => $code,
-        'msg' => $msg
-    ]));
 }
 
 /**
@@ -159,17 +133,17 @@ function _monolog(string $subDir = null): \Monolog\Logger
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// error handler
-set_error_handler(function (int $errno , string $errstr) {
-    _error($errno, "error: {$errstr}");
-});
-
 // exception handler
 set_exception_handler(function (\Throwable $ex) {
-    _error(
-        $ex->getCode() ?: DEFAULT_EXCEPTION_CODE,
-        'exception: ' . $ex->getMessage()
-    );
+    exit(json_encode([
+        'code' => $ex->getCode() ?: DEFAULT_EXCEPTION_CODE,
+        'msg' => 'exception: ' . $ex->getMessage()
+    ]));
+});
+
+// error handler
+set_error_handler(function (int $errno , string $errstr) {
+    throw new \RuntimeException("error: {$errstr}", $errno);
 });
 
 // ==================================================
@@ -224,7 +198,8 @@ call_user_func(function () {
 
     // dispatch
     $controller = new $controllerClass($request);
-    _success(
-        call_user_func([$controller, $actionName])
-    );
+    exit(json_encode([
+        'code' => 0,
+        'data' => call_user_func([$controller, $actionName])
+    ]));
 });
