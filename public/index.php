@@ -248,6 +248,12 @@ call_user_func(function () {
 
     // request
     $input = file_get_contents('php://input');
+    if (_config('config', 'aes.enable')) {
+        $input = _aes()->decrypt(base64_decode($input));
+        if (!$input) {
+            throw new \RuntimeException('request aes decrypt failed');
+        }
+    }
     $request = [];
     if (!empty($input)) {
         $request = json_decode($input, true);
