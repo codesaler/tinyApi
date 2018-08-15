@@ -1,0 +1,54 @@
+
+
+config
+------------------------------
+url:                https://trust-uat.paytm.in/wallet-web/salesToUserCredit/refund/api/paytm_underline_refund
+merchant_key:       0rTpASIzxofqGb7@
+merchant_guid:      fdb82989-ef7e-4d90-a03a-e90ad6501e41
+sales_wallet_guid:  84262c6f-e1c0-42f9-bb9c-c0724a80d5c2
+
+
+header
+------------------------------
+[
+    "Content-Type:application/json",
+    "mid:fdb82989-ef7e-4d90-a03a-e90ad6501e41",
+    "checksumhash:QYqT8JJSMAVOoj7+x35JNlKTziaBy7YPE9MR4YCwcCyZbH5mKnxvz2lNG0hSSFz/7Lwp7mRK2qxRD0nFdhPGILOxXLgdfPiO/jn5asuUapU="
+]
+
+
+request
+------------------------------
+{
+    "request": {
+      "requestType": null,
+      "merchantGuid": "fdb82989-ef7e-4d90-a03a-e90ad6501e41",
+      "merchantOrderId": "refund_1943427_2071906",
+      "salesWalletName": null,
+      "salesWalletGuid": "84262c6f-e1c0-42f9-bb9c-c0724a80d5c2",
+      "payeeEmailId": null,
+      "payeePhoneNumber": null,
+      "payeeSsoId": "6395531467",
+      "appliedToNewUsers": "Y",
+      "amount": "7.00",
+      "currencyCode": "INR"
+    },
+    "metadata": "billno: RWYKB37367, order_id: 34453970, refund_bill_id: 1943427, refund_record_id: 2071906",
+    "ipAddress": "172.16.27.47",
+    "platformName": "PayTM",
+    "operationType": "SALES_TO_USER_CREDIT"
+}
+
+
+response
+------------------------------
+{
+    "type": null,
+    "requestGuid": null,
+    "orderId": null,
+    "status": null,
+    "statusCode": "GE_1043",
+    "statusMessage": "Merchant does not exists",
+    "response": null,
+    "metadata": null
+}

@@ -11,7 +11,7 @@
     },
     "autoload": {
         "psr-4": {
-            "api\\": ""
+            "tiny\\api\\": ""
         }
     },
     "minimum-stability": "stable",
