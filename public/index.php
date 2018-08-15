@@ -122,6 +122,22 @@ function _monolog(string $subDir = null): \Monolog\Logger
 }
 
 /**
+ * _aes
+ *
+ * @return \phpseclib\Crypt\AES
+ */
+function _aes(): \phpseclib\Crypt\AES
+{
+    static $aes;
+    if (empty($aes)) {
+        $aes = new \phpseclib\Crypt\AES();
+        $aes->setKey(_config('config', 'aes.key'));
+        $aes->setIV(_config('config', 'aes.iv'));
+    }
+    return $aes;
+}
+
+/**
  * _model
  *
  * @param string $modelName
@@ -138,22 +154,6 @@ function _model(string $modelName): \tiny\api\model\AbstractModel
         $models[$modelClass] = new $modelClass();
     }
     return $models[$modelClass];
-}
-
-/**
- * _aes
- *
- * @return \phpseclib\Crypt\AES
- */
-function _aes(): \phpseclib\Crypt\AES
-{
-    static $aes;
-    if (empty($aes)) {
-        $aes = new \phpseclib\Crypt\AES();
-        $aes->setKey(_config('config', 'aes.key'));
-        $aes->setIV(_config('config', 'aes.iv'));
-    }
-    return $aes;
 }
 
 // ==================================================
