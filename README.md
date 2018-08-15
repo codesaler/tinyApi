@@ -1,8 +1,6 @@
 # tinyApi
 
-极其精简的 Api 脚手架。
-
-一些特性：
+极其精简的 Api 脚手架：
 
 - 使用 composer
 - namespace 默认 `tiny\api\`
@@ -14,8 +12,6 @@
 - 强制使用 AES 加密
 - 强制进行 timestamp hash 头校验
 
-### introduce
-
-没什么好介绍的。
+没什么使用文档。
 
 ![](https://raw.githubusercontent.com/LemonLone/tinyApi/master/screenshot.png)
