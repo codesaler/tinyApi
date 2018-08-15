@@ -19,7 +19,7 @@ return [
         'level' => \Monolog\Logger::INFO
     ],
     'aes' => [
-        'enable' => true,
+        'enable' => false,
         'key' => '18b1db0370a0d612be59e851944c470b',
         'iv' => '55eaa49877495b8e6b6fd831d42f8e96'
     ],

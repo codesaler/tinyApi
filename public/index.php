@@ -235,5 +235,8 @@ call_user_func(function () {
         'cost' => microtime(true) - TIME_START,
         'data' => call_user_func([$controller, $actionName])
     ]);
+    if (_config('config', 'aes.enable')) {
+        $response = base64_encode(_aes()->encrypt($response));
+    }
     exit($response);
 });
