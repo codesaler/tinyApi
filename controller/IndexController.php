@@ -16,6 +16,6 @@ class IndexController
      */
     public function index(): array
     {
-
+        return _model('demo')->getVersion();
     }
 }
