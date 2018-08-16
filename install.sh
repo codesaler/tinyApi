@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# find composer.phar & update
-echo -e "\033[34mupdate composer...\033[0m"
-
 # create composer.json
+# --------------------------------------------------
+echo -e "\033[34mcreate composer.json...\033[0m"
 cat>"composer.json"<<"EOF"
 {
     "name": "LemonLone/tinyApi",
@@ -33,9 +32,13 @@ EOF
 echo "composer.json created"
 
 # download composer.phar
+# --------------------------------------------------
+echo -e "\033[34mdownload composer.phar...\033[0m"
 `wget https://getcomposer.org/download/1.7.1/composer.phar`
 
-# composer.phar update
+# install composer
+# --------------------------------------------------
+echo -e "\033[34minstall composer...\033[0m"
 if [ ! -f "composer.phar" ]; then
     echo -e "\033[31m'composer.phar' not found\033[0m"
     exit
@@ -55,9 +58,10 @@ if [ "$PHP" != "php" ]; then
         exit
     fi
 fi
-`$PHP composer.phar update`
+`$PHP composer.phar install`
 
 # create dirs & files
+# --------------------------------------------------
 echo -e "\033[34mcreate dirs & files...\033[0m"
 
 # config/
