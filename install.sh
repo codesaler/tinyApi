@@ -1,3 +1,228 @@
+#!/bin/bash
+
+# find composer.phar & update
+echo -e "\033[34mupdate composer...\033[0m"
+
+# create composer.json
+cat>"composer.json"<<"EOF"
+{
+    "name": "LemonLone/tinyApi",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2",
+        "catfan/medoo": "~1.5",
+        "predis/predis": "~1.1",
+        "monolog/monolog": "~1.23",
+        "phpseclib/phpseclib": "~2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "tiny\\api\\": ""
+        }
+    },
+    "minimum-stability": "stable",
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    }
+}
+EOF
+echo "composer.json created"
+
+# composer.phar update
+if [ ! -f "composer.phar" ]; then
+    echo -e "\033[31m'composer.phar' not found\033[0m"
+    exit
+fi
+PHP="php"
+while [ -n "$1" ]; do
+    case "$1" in
+        --php=*)
+            PHP=${1##*=}
+            break;;
+    esac
+    shift
+done
+if [ "$PHP" != "php" ]; then
+    if [ ! -x "$PHP" ]; then
+        echo -e "\033[31m'$PHP' not executable\033[0m"
+        exit
+    fi
+fi
+`$PHP composer.phar update`
+
+# create dirs & files
+echo -e "\033[34mcreate dirs & files...\033[0m"
+
+# config/
+# config/config.php
+`mkdir config`
+echo "config/"
+cat>"config/config.php"<<"EOF"
+<?php
+
+return [
+    'medoo' => [
+        'database_type' => 'mysql',
+        'database_name' => 'dbname',
+        'server' => '127.0.0.1',
+        'username' => 'root',
+        'password' => ''
+    ],
+    'predis' => [
+        'scheme' => 'tcp',
+        'host' => '127.0.0.1',
+        'port' => 6379
+    ],
+    'monolog' => [
+        'name' => 'name',
+        'dir' => '/tmp/',
+        'level' => \Monolog\Logger::INFO
+    ],
+    'aes' => [
+        'enable' => false,
+        'key' => '18b1db0370a0d612be59e851944c470b',
+        'iv' => '55eaa49877495b8e6b6fd831d42f8e96'
+    ],
+    'verify' => [
+        'enable' => false,
+        'interval' => 5,
+        'key' => 'test',
+        'secret' => '192c3896faeb6d14e2208ee3eb96f38c'
+    ]
+];
+EOF
+echo "config/config.php"
+
+# controller/
+# controller/AbstractController.php
+# controller/IndexController.php
+`mkdir controller`
+echo "controller/"
+cat>"controller/AbstractController.php"<<"EOF"
+<?php
+
+namespace tiny\api\controller;
+
+/**
+ * Class AbstractController
+ *
+ * @author LemonLone <lemonlone.com>
+ */
+abstract class AbstractController
+{
+    /**
+     * @var array
+     */
+    private $request = [];
+
+    /**
+     * AbstractController constructor.
+     *
+     * @param array $request
+     */
+    public function __construct(array $request)
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * param
+     *
+     * @param string $key
+     * @param mixed $defaultValue
+     * @return mixed|null
+     */
+    protected function param(string $key, $defaultValue = null)
+    {
+        return $this->request[$key] ?: $defaultValue;
+    }
+}
+EOF
+echo "controller/AbstractController.php"
+cat>"controller/IndexController.php"<<"EOF"
+<?php
+
+namespace tiny\api\controller;
+
+/**
+ * Class IndexController
+ *
+ * @author LemonLone <lemonlone.com>
+ */
+class IndexController
+{
+    /**
+     * index
+     *
+     * @return array
+     */
+    public function index(): array
+    {
+        return [
+            'version' => _model('demo')->getVersion()
+        ];
+    }
+}
+EOF
+echo "controller/IndexController.php"
+
+# model/
+# model/AbstractModel.php
+# model/DemoModel.php
+`mkdir model`
+echo "model/"
+cat>"model/AbstractModel.php"<<"EOF"
+<?php
+
+namespace tiny\api\model;
+
+/**
+ * Class AbstractModel
+ *
+ * @method getVersion(): string
+ *
+ * @author LemonLone <lemonlone.com>
+ */
+abstract class AbstractModel
+{
+
+}
+EOF
+echo "model/AbstractModel.php"
+cat>"model/DemoModel.php"<<"EOF"
+<?php
+
+namespace tiny\api\model;
+
+/**
+ * Class DemoModel
+ *
+ * @author LemonLone <lemonlone.com>
+ */
+class DemoModel extends AbstractModel
+{
+    /**
+     * getVersion
+     *
+     * @return string
+     */
+    public function getVersion(): string
+    {
+        return 'v1.0.0';
+    }
+}
+EOF
+echo "model/DemoModel.php"
+
+# public/
+# public/index.php
+`mkdir public`
+echo "public/"
+cat>"public/index.php"<<"EOF"
 <?php
 
 // ==================================================
@@ -275,3 +500,8 @@ call_user_func(function () {
     }
     exit($response);
 });
+EOF
+echo "public/index.php"
+
+# finish
+echo -e "\033[32mhave fun!\033[0m"

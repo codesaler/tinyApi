@@ -14,6 +14,6 @@
     - 规则：hash = md5(key + path + timestamp + secret)
 - 建议开启 AES 加密
 
-没有使用文档。
+执行 `./install.sh` 安装，可通过 `--php=` 指定 bin/php 位置。
 
 ![](https://raw.githubusercontent.com/LemonLone/tinyApi/master/screenshot.png)
