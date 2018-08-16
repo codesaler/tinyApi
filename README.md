@@ -2,6 +2,8 @@
 
 极其精简的 Api 脚手架。
 
+### features
+
 - 使用 composer
 - namespace 默认 `tiny\api\`
 - DB：[catfan/Medoo](https://github.com/catfan/Medoo)
@@ -13,6 +15,8 @@
     - 参数：verify-timestamp / verify-key / verify-hash
     - 规则：hash = md5(key + path + timestamp + secret)
 - 建议开启 AES 加密
+
+### install
 
 执行 `./install.sh` 安装，可通过 `--php=` 指定 bin/php 位置。
 
