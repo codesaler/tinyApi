@@ -1,5 +1,37 @@
 #!/bin/bash
 
+# check php version
+# --------------------------------------------------
+PHP="php"
+while [ -n "$1" ]; do
+    case "$1" in
+        --php=*)
+            PHP=${1##*=}
+            break;;
+    esac
+    shift
+done
+if [ "$PHP" != "php" ]; then
+    if [ ! -x "$PHP" ]; then
+        echo -e "\033[31m'$PHP' not executable\033[0m"
+        exit
+    fi
+fi
+PHP_VERSION=`$PHP --version | awk '{print $2}' | sed -n '1p'`
+if [ "$PHP_VERSION" \< "7.2.0" ]; then
+    echo -e "\033[31mphp version must >= 7.2.0\033[0m"
+    exit
+fi
+
+# download composer.phar
+# --------------------------------------------------
+echo -e "\033[34mdownload composer.phar...\033[0m"
+wget https://getcomposer.org/download/1.7.1/composer.phar
+if [ ! -f "composer.phar" ]; then
+    echo -e "\033[31mdownload composer.phar failed\033[0m"
+    exit
+fi
+
 # create composer.json
 # --------------------------------------------------
 echo -e "\033[34mcreate composer.json...\033[0m"
@@ -29,36 +61,15 @@ cat>"composer.json"<<"EOF"
     }
 }
 EOF
-echo "composer.json created"
-
-# download composer.phar
-# --------------------------------------------------
-echo -e "\033[34mdownload composer.phar...\033[0m"
-`wget https://getcomposer.org/download/1.7.1/composer.phar`
+if [ ! -f "composer.json" ]; then
+    echo -e "\033[31mcreate composer.json failed\033[0m"
+    exit
+fi
 
 # install composer
 # --------------------------------------------------
 echo -e "\033[34minstall composer...\033[0m"
-if [ ! -f "composer.phar" ]; then
-    echo -e "\033[31m'composer.phar' not found\033[0m"
-    exit
-fi
-PHP="php"
-while [ -n "$1" ]; do
-    case "$1" in
-        --php=*)
-            PHP=${1##*=}
-            break;;
-    esac
-    shift
-done
-if [ "$PHP" != "php" ]; then
-    if [ ! -x "$PHP" ]; then
-        echo -e "\033[31m'$PHP' not executable\033[0m"
-        exit
-    fi
-fi
-`$PHP composer.phar install`
+$PHP composer.phar install
 
 # create dirs & files
 # --------------------------------------------------
@@ -66,8 +77,7 @@ echo -e "\033[34mcreate dirs & files...\033[0m"
 
 # config/
 # config/config.php
-`mkdir config`
-echo "config/"
+mkdir config && echo "config/"
 cat>"config/config.php"<<"EOF"
 <?php
 
@@ -107,8 +117,7 @@ echo "config/config.php"
 # controller/
 # controller/AbstractController.php
 # controller/IndexController.php
-`mkdir controller`
-echo "controller/"
+mkdir controller && echo "controller/"
 cat>"controller/AbstractController.php"<<"EOF"
 <?php
 
@@ -180,8 +189,7 @@ echo "controller/IndexController.php"
 # model/
 # model/AbstractModel.php
 # model/DemoModel.php
-`mkdir model`
-echo "model/"
+mkdir model && echo "model/"
 cat>"model/AbstractModel.php"<<"EOF"
 <?php
 
@@ -227,8 +235,7 @@ echo "model/DemoModel.php"
 
 # public/
 # public/index.php
-`mkdir public`
-echo "public/"
+mkdir public && echo "public/"
 cat>"public/index.php"<<"EOF"
 <?php
 
@@ -511,4 +518,4 @@ EOF
 echo "public/index.php"
 
 # finish
-echo -e "\033[32mhave fun!\033[0m"
+echo -e "\033[42;37m have fun! \033[0m"
