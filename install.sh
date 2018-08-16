@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# check installed
+# --------------------------------------------------
+if [ -f "composer.lock" ]; then
+    echo -e "\033[31malready installed\033[0m"
+    exit
+fi
+
 # check php version
 # --------------------------------------------------
 echo -e "\033[34mcheck php version...\033[0m"
