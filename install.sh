@@ -2,6 +2,7 @@
 
 # check php version
 # --------------------------------------------------
+echo -e "\033[34mcheck php version...\033[0m"
 PHP="php"
 while [ -n "$1" ]; do
     case "$1" in
