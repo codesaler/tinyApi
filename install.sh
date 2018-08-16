@@ -32,6 +32,9 @@ cat>"composer.json"<<"EOF"
 EOF
 echo "composer.json created"
 
+# download composer.phar
+`wget https://getcomposer.org/download/1.7.1/composer.phar`
+
 # composer.phar update
 if [ ! -f "composer.phar" ]; then
     echo -e "\033[31m'composer.phar' not found\033[0m"
