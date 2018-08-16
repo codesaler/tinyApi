@@ -4,6 +4,7 @@
 
 ### features
 
+- PHP >= 7.2
 - 使用 composer
 - namespace 默认 `tiny\api\`
 - DB：[catfan/Medoo](https://github.com/catfan/Medoo)
