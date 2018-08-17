@@ -1,6 +1,6 @@
 # tinyApi
 
-极其精简的 Api 脚手架。
+精简的php Api 脚手架。
 
 ### features
 
