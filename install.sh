@@ -45,7 +45,7 @@ fi
 # download composer.phar
 # --------------------------------------------------
 echo -e "\033[34mdownload composer.phar...\033[0m"
-wget https://getcomposer.org/download/1.7.1/composer.phar
+wget https://getcomposer.org/composer.phar
 if [ ! -f "composer.phar" ]; then
     echo -e "\033[31mdownload composer.phar failed\033[0m"
     exit
